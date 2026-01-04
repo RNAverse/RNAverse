@@ -1,8 +1,12 @@
 // src/App.jsx
-import Footer from "./components/Footer.jsx";
 import { NavLink, Routes, Route } from "react-router-dom";
+
 import Home from "./pages/Home.jsx";
 import Predict from "./pages/Predict.jsx";
+import Results from "./pages/Results.jsx";
+import Help from "./pages/Help.jsx";
+import Settings from "./pages/Settings.jsx";
+import Footer from "./components/Footer.jsx";
 
 import "./App.css";
 
@@ -16,18 +20,51 @@ function TopNav() {
         </div>
 
         <nav className="nav">
-          <NavLink to="/" end className={({ isActive }) => (isActive ? "nav__link active" : "nav__link")}>
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              isActive ? "nav__link active" : "nav__link"
+            }
+          >
             Home
           </NavLink>
-          <NavLink to="/predict" className={({ isActive }) => (isActive ? "nav__link active" : "nav__link")}>
+
+          <NavLink
+            to="/predict"
+            className={({ isActive }) =>
+              isActive ? "nav__link active" : "nav__link"
+            }
+          >
             Predict
           </NavLink>
-          <a className="nav__link" href="#results" onClick={(e) => e.preventDefault()}>
+
+          <NavLink
+            to="/results"
+            className={({ isActive }) =>
+              isActive ? "nav__link active" : "nav__link"
+            }
+          >
             Results
-          </a>
-          <a className="nav__link" href="#help" onClick={(e) => e.preventDefault()}>
+          </NavLink>
+
+          <NavLink
+            to="/help"
+            className={({ isActive }) =>
+              isActive ? "nav__link active" : "nav__link"
+            }
+          >
             Help
-          </a>
+          </NavLink>
+
+          <NavLink
+            to="/settings"
+            className={({ isActive }) =>
+              isActive ? "nav__link active" : "nav__link"
+            }
+          >
+            Settings
+          </NavLink>
         </nav>
       </div>
     </header>
@@ -53,8 +90,3 @@ export default function App() {
     </div>
   );
 }
-
-
-
-
-   

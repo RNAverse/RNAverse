@@ -14,6 +14,11 @@ import { FaDna, FaVial, FaRobot, FaChartBar } from "react-icons/fa";
 export default function Results() {
   const [activeTab, setActiveTab] = useState("table");
 
+  // 🔹 SEARCH & FILTER STATE (IMPORTANT)
+  const [searchText, setSearchText] = useState("");
+  const [methylationFilter, setMethylationFilter] = useState("all");
+  const [modelFilter, setModelFilter] = useState("all");
+
   return (
     <div className="results-page">
       <div className="results-container">
@@ -36,8 +41,21 @@ export default function Results() {
         {activeTab === "table" && (
           <>
             <ResultsInfoBox />
-            <ResultsSearch />
-            <ResultsTable />
+
+            <ResultsSearch
+              searchText={searchText}
+              setSearchText={setSearchText}
+              methylationFilter={methylationFilter}
+              setMethylationFilter={setMethylationFilter}
+              modelFilter={modelFilter}
+              setModelFilter={setModelFilter}
+            />
+
+            <ResultsTable
+              searchText={searchText}
+              methylationFilter={methylationFilter}
+              modelFilter={modelFilter}
+            />
           </>
         )}
 

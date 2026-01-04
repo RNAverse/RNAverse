@@ -30,7 +30,27 @@ const data = [
   }
 ];
 
-export default function ResultsTable() {
+export default function ResultsTable({
+  searchText,
+  methylationFilter,
+  modelFilter
+}) {
+  const filteredData = data.filter((row) => {
+    const matchSearch =
+      row.id.toLowerCase().includes(searchText.toLowerCase()) ||
+      row.sequence.toLowerCase().includes(searchText.toLowerCase());
+
+    const matchMethylation =
+      methylationFilter === "all" ||
+      row.methylation === methylationFilter;
+
+    const matchModel =
+      modelFilter === "all" ||
+      row.model === modelFilter;
+
+    return matchSearch && matchMethylation && matchModel;
+  });
+
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
       <table className="w-full text-sm">
@@ -47,34 +67,53 @@ export default function ResultsTable() {
         </thead>
 
         <tbody>
-          {data.map((row, i) => (
-            <tr key={i} className="border-t hover:bg-gray-50">
-              <td className="px-4 py-3 font-medium">{row.id}</td>
-              <td className="px-4 py-3 font-mono text-xs bg-gray-100 rounded">
-                {row.sequence}
-              </td>
-              <td className="px-4 py-3">{row.type}</td>
-              <td className="px-4 py-3">
-                <span className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs">
-                  {row.methylation}
-                </span>
-              </td>
-              <td className="px-4 py-3">
-                <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
-                  {row.model}
-                </span>
-              </td>
-              <td className="px-4 py-3 font-semibold text-orange-600">
-                {row.score}
-              </td>
-              <td className="px-4 py-3">
-                <span className={`badge ${row.status === "Methylated" ? "badge-green" : "badge-gray"}`}>
-                  {row.status}
-                </span>
-
+          {filteredData.length === 0 ? (
+            <tr>
+              <td colSpan="7" className="px-4 py-6 text-center text-gray-500">
+                No results found
               </td>
             </tr>
-          ))}
+          ) : (
+            filteredData.map((row, i) => (
+              <tr key={i} className="border-t hover:bg-gray-50">
+                <td className="px-4 py-3 font-medium">{row.id}</td>
+
+                <td className="px-4 py-3 font-mono text-xs bg-gray-100 rounded">
+                  {row.sequence}
+                </td>
+
+                <td className="px-4 py-3">{row.type}</td>
+
+                <td className="px-4 py-3">
+                  <span className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs">
+                    {row.methylation}
+                  </span>
+                </td>
+
+                <td className="px-4 py-3">
+                  <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
+                    {row.model}
+                  </span>
+                </td>
+
+                <td className="px-4 py-3 font-semibold text-orange-600">
+                  {row.score}
+                </td>
+
+                <td className="px-4 py-3">
+                  <span
+                    className={`badge ${
+                      row.status === "Methylated"
+                        ? "badge-green"
+                        : "badge-gray"
+                    }`}
+                  >
+                    {row.status}
+                  </span>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>
