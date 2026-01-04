@@ -1,17 +1,60 @@
-import { Routes, Route } from "react-router-dom";
-import Results from "./pages/Results";
-import Help from "./pages/Help";
-import Settings from "./pages/Settings";
+// src/App.jsx
+import Footer from "./components/Footer.jsx";
+import { NavLink, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home.jsx";
+import Predict from "./pages/Predict.jsx";
 
-function App() {
+import "./App.css";
+
+function TopNav() {
   return (
-    <Routes>
-      <Route path="/results" element={<Results />} />
-      <Route path="/help" element={<Help />} />
-      <Route path="/settings" element={<Settings />} />
+    <header className="topnav">
+      <div className="topnav__inner">
+        <div className="brand">
+          <div className="brand__icon">⚡</div>
+          <span className="brand__text">RNAverse</span>
+        </div>
 
-    </Routes>
+        <nav className="nav">
+          <NavLink to="/" end className={({ isActive }) => (isActive ? "nav__link active" : "nav__link")}>
+            Home
+          </NavLink>
+          <NavLink to="/predict" className={({ isActive }) => (isActive ? "nav__link active" : "nav__link")}>
+            Predict
+          </NavLink>
+          <a className="nav__link" href="#results" onClick={(e) => e.preventDefault()}>
+            Results
+          </a>
+          <a className="nav__link" href="#help" onClick={(e) => e.preventDefault()}>
+            Help
+          </a>
+        </nav>
+      </div>
+    </header>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <div className="appShell">
+      <TopNav />
+
+      <main className="appMain">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/predict" element={<Predict />} />
+          <Route path="/results" element={<Results />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
+
+
+
+
+   
