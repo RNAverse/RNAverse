@@ -22,7 +22,7 @@ export default function Home() {
       icon: "🤖",
     },
     {
-      title: "Visual Results",
+      title: "Visual Results & Exports Results",
       desc: "Clear outputs and downloadable reports for your predictions",
       icon: "📊",
     },
@@ -45,9 +45,24 @@ export default function Home() {
           <span className="desc__highlight">(m6A, m5C, m7G)</span> using machine learning and deep learning models.
         </p>
 
-        <button className="cta" onClick={() => navigate("/predict")}>
-          Start Prediction <span className="cta__arrow">→</span>
-        </button>
+        {/* ✅ Buttons row (Start Prediction + Learn More) */}
+        <div className="heroActions">
+          <button className="cta" type="button" onClick={() => navigate("/predict")}>
+            Start Prediction <span className="cta__arrow">→</span>
+          </button>
+
+          <button
+            className="cta ghost"
+            type="button"
+            onClick={() => {
+              // ✅ placeholder for now (your friend will connect real Help later)
+              window.location.hash = "help";
+            }}
+          >
+            Learn More
+          </button>
+        </div>
+
 
         <div className="dots" aria-hidden="true">
           {Array.from({ length: 12 }).map((_, i) => (
