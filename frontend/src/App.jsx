@@ -1,12 +1,24 @@
-// src/App.jsx
 import { NavLink, Routes, Route } from "react-router-dom";
 
+// Pages
 import Home from "./pages/Home.jsx";
 import Predict from "./pages/Predict.jsx";
 import Results from "./pages/Results.jsx";
 import Help from "./pages/Help.jsx";
 import Settings from "./pages/Settings.jsx";
+
+// Components
 import Footer from "./components/Footer.jsx";
+
+// React Icons
+import {
+  FaDna,
+  FaHome,
+  FaFlask,
+  FaChartBar,
+  FaQuestionCircle,
+  FaCog,
+} from "react-icons/fa";
 
 import "./App.css";
 
@@ -15,7 +27,9 @@ function TopNav() {
     <header className="topnav">
       <div className="topnav__inner">
         <div className="brand">
-          <div className="brand__icon">⚡</div>
+          <div className="brand__icon">
+            <FaDna />
+          </div>
           <span className="brand__text">RNAverse</span>
         </div>
 
@@ -27,6 +41,7 @@ function TopNav() {
               isActive ? "nav__link active" : "nav__link"
             }
           >
+            <FaHome style={{ marginRight: "6px" }} />
             Home
           </NavLink>
 
@@ -36,6 +51,7 @@ function TopNav() {
               isActive ? "nav__link active" : "nav__link"
             }
           >
+            <FaFlask style={{ marginRight: "6px" }} />
             Predict
           </NavLink>
 
@@ -45,6 +61,7 @@ function TopNav() {
               isActive ? "nav__link active" : "nav__link"
             }
           >
+            <FaChartBar style={{ marginRight: "6px" }} />
             Results
           </NavLink>
 
@@ -54,6 +71,7 @@ function TopNav() {
               isActive ? "nav__link active" : "nav__link"
             }
           >
+            <FaQuestionCircle style={{ marginRight: "6px" }} />
             Help
           </NavLink>
 
@@ -63,6 +81,7 @@ function TopNav() {
               isActive ? "nav__link active" : "nav__link"
             }
           >
+            <FaCog style={{ marginRight: "6px" }} />
             Settings
           </NavLink>
         </nav>

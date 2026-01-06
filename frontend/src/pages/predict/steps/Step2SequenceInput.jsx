@@ -1,3 +1,10 @@
+import {
+  FaFileAlt,
+  FaUpload,
+  FaTimes,
+  FaExclamationTriangle,
+} from "react-icons/fa";
+
 export default function Step2SequenceInput({
   sequences,
   setSequences,
@@ -16,18 +23,22 @@ export default function Step2SequenceInput({
   return (
     <div className="card">
       <div className="card__head">
-        <div className="card__icon">📄</div>
+        <div className="card__icon">
+          <FaFileAlt />
+        </div>
         <div>
           <div className="card__title">Input Sequences</div>
           <div className="card__hint">
-            Paste your sequences or upload a file. Valid characters for {typeLabel}:{" "}
-            <b>{validChars}</b>
+            Paste your sequences or upload a file. Valid characters for{" "}
+            {typeLabel}: <b>{validChars}</b>
           </div>
         </div>
       </div>
 
       <textarea
-        className={`seqTextarea ${sequenceError ? "seqTextarea--error" : ""}`}
+        className={`seqTextarea ${
+          sequenceError ? "seqTextarea--error" : ""
+        }`}
         placeholder={placeholderText}
         value={sequences}
         onChange={(e) => {
@@ -37,10 +48,15 @@ export default function Step2SequenceInput({
         }}
       />
 
-      {sequenceError && <div className="warnBox">{sequenceError}</div>}
+      {sequenceError && (
+        <div className="warnBox">
+          <FaExclamationTriangle style={{ marginRight: "6px" }} />
+          {sequenceError}
+        </div>
+      )}
 
       <button className="exampleBtn" onClick={loadExample}>
-        ✨ Load Example {typeLabel} Sequences
+        Load Example {typeLabel} Sequences
       </button>
 
       <div className="orRow">
@@ -60,13 +76,20 @@ export default function Step2SequenceInput({
       {uploadedFile ? (
         <div className="uploadedRow">
           <div className="uploadedName">{uploadedFile.name}</div>
-          <button type="button" className="removeFileBtn" onClick={removeFile}>
-            ✖ Remove
+          <button
+            type="button"
+            className="removeFileBtn"
+            onClick={removeFile}
+          >
+            <FaTimes style={{ marginRight: "6px" }} />
+            Remove
           </button>
         </div>
       ) : (
         <button className="uploadBox" onClick={openFilePicker}>
-          <div className="uploadIcon">⬆️</div>
+          <div className="uploadIcon">
+            <FaUpload />
+          </div>
           <div className="uploadTitle">Upload FASTA or CSV</div>
           <div className="uploadHint">Click to browse files</div>
         </button>
