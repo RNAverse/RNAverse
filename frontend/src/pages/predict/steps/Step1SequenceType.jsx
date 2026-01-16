@@ -1,18 +1,34 @@
 import { PiDnaFill, PiDnaThin } from "react-icons/pi";
 import { GiDna2 } from "react-icons/gi";
-
+import { HiOutlineQuestionMarkCircle } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 export default function Step1SequenceType({ types, sequenceType, setSequenceType }) {
+  const navigate = useNavigate();
+
   return (
     <div className="card">
-      <div className="card__head">
-        <div className="card__icon"><PiDnaFill /></div>
+      <div className="card__head help">
+        <div className="card__icon">
+          <PiDnaFill />
+        </div>
+
         <div>
           <div className="card__title">Select Sequence Type</div>
           <div className="card__hint">
             Choose the type of sequence you want to analyze
           </div>
         </div>
+
+        {/* ❓ Help button */}
+        <button
+          type="button"
+          className="helpBtn"
+          onClick={() => navigate("/help")}
+          title="Help"
+        >
+          <HiOutlineQuestionMarkCircle />
+        </button>
       </div>
 
       {/* RNA / DNA buttons */}
@@ -32,7 +48,7 @@ export default function Step1SequenceType({ types, sequenceType, setSequenceType
         ))}
       </div>
 
-      {/* ===== OPTION 4: Illustration Block (visual only) ===== */}
+      {/* Illustration block */}
       <div className="illustrationBlock">
         <div className="illusItem">
           <span className="illusIcon"><PiDnaThin /></span>
@@ -46,7 +62,6 @@ export default function Step1SequenceType({ types, sequenceType, setSequenceType
           <span className="illusLabel">DNA</span>
         </div>
       </div>
-      {/* ===== END Illustration Block ===== */}
     </div>
   );
 }

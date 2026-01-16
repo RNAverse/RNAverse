@@ -1,6 +1,9 @@
-import { HiOutlineBeaker } from "react-icons/hi2";
+import { HiOutlineBeaker, HiOutlineQuestionMarkCircle } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 export default function Step3Methylation({ methylation, toggleMethyl, canGoNext }) {
+  const navigate = useNavigate();
+
   const options = [
     { id: "m6A", label: "m⁶A", fullName: "N6-methyladenosine", description: "Most abundant mRNA modification", available: true },
     { id: "m5C", label: "m⁵C", fullName: "5-methylcytosine", description: "Found in both DNA and RNA", available: true },
@@ -11,10 +14,21 @@ export default function Step3Methylation({ methylation, toggleMethyl, canGoNext 
     <div className="card">
       <div className="card__head">
         <div className="card__icon"><HiOutlineBeaker /></div>
+
         <div>
           <div className="card__title">Methylation Types</div>
           <div className="card__hint">Select one or more methylation types to predict</div>
         </div>
+
+        {/* ❓ Help button (same class, same CSS) */}
+        <button
+          type="button"
+          className="helpBtn"
+          onClick={() => navigate("/help")}
+          title="Help"
+        >
+          <HiOutlineQuestionMarkCircle />
+        </button>
       </div>
 
       <div className="mGrid">

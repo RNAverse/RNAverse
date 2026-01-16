@@ -1,4 +1,6 @@
+// src/pages/Predict.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Step1SequenceType from "./predict/steps/Step1SequenceType";
 import Step2SequenceInput from "./predict/steps/Step2SequenceInput";
@@ -6,6 +8,8 @@ import Step3Methylation from "./predict/steps/Step3Methylation";
 import Step4ModelSelection from "./predict/steps/Step4ModelSelection";
 
 export default function Predict() {
+  const navigate = useNavigate();
+
   const steps = useMemo(
     () => ["Sequence Type", "Input Sequences", "Methylation Type", "Model Selection"],
     []
@@ -29,7 +33,7 @@ export default function Predict() {
   /* =========================
      STEP 3
      ========================= */
-  const [methylation, setMethylation] = useState([]); // ["m6A","m5C",...]
+  const [methylation, setMethylation] = useState([]);
 
   /* =========================
      STEP 4
@@ -37,7 +41,14 @@ export default function Predict() {
   const [runAllModels, setRunAllModels] = useState(false);
   const [selectedModels, setSelectedModels] = useState([]);
 
-  /* ✅ Clear Step 2 data when RNA/DNA changes */
+  const ALL_MODELS = useMemo(
+    () => ["SVM", "RandomForest", "LogisticRegression", "MLP", "XGBoost", "CNN"],
+    []
+  );
+
+  /* =========================
+     Reset Step 2 if type changes
+     ========================= */
   useEffect(() => {
     setSequences("");
     setSequenceError(null);
@@ -76,13 +87,10 @@ ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
     const allowed =
       sequenceType === "RNA" ? ["A", "U", "C", "G"] : ["A", "C", "G", "T"];
 
-    const lines = text.split("\n");
-
-    for (const line of lines) {
+    for (const line of text.split("\n")) {
       if (line.startsWith(">")) continue;
 
-      const clean = line.toUpperCase().replace(/\s/g, "");
-      for (const ch of clean) {
+      for (const ch of line.toUpperCase().replace(/\s/g, "")) {
         if (!allowed.includes(ch)) {
           setSequenceError(
             sequenceType === "RNA"
@@ -98,7 +106,7 @@ ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
   };
 
   /* =========================
-     Nav rules
+     Navigation rules
      ========================= */
   const canGoNext = () => {
     if (step === 1) return !!sequenceType;
@@ -113,28 +121,27 @@ ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
     setStep((s) => Math.min(4, s + 1));
   };
 
-  const onBack = () => setStep((s) => Math.max(1, s - 1));
+  // ✅ FIXED BACK BUTTON
+  const onBack = () => {
+    if (step === 1) {
+      navigate("/"); // go Home
+    } else {
+      setStep((s) => s - 1);
+    }
+  };
 
   /* =========================
-     Step 2: example + upload
+     Step 2 helpers
      ========================= */
   const loadExample = () => {
     const example =
       sequenceType === "DNA"
-        ? `>Sequence1
-ACGTTGCA
->Sequence2
-GATTACA`
-        : `>Sequence1
-AUGCCAUAG
->Sequence2
-GCUAAUCGGA`;
+        ? `>Sequence1\nACGTTGCA\n>Sequence2\nGATTACA`
+        : `>Sequence1\nAUGCCAUAG\n>Sequence2\nGCUAAUCGGA`;
 
     setSequences(example);
     validateSequences(example);
-
     setUploadedFile(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const openFilePicker = () => fileInputRef.current?.click();
@@ -152,55 +159,43 @@ GCUAAUCGGA`;
     }
 
     setUploadedFile(file);
-
     const text = await file.text();
     setSequences(text);
     validateSequences(text);
-
-    e.target.value = "";
   };
 
   const removeFile = () => {
     setUploadedFile(null);
     setSequences("");
     setSequenceError(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   /* =========================
-     Step 3 toggle
+     Step 3
      ========================= */
   const toggleMethyl = (typeId) => {
-  setMethylation((prev) => {
-    if (prev.includes(typeId)) {
-      // already selected → remove it
-      return prev.filter((item) => item !== typeId);
-    } else {
-      // not selected → add it
-      return [...prev, typeId];
-    }
-  });
-};
+    setMethylation((prev) =>
+      prev.includes(typeId)
+        ? prev.filter((x) => x !== typeId)
+        : [...prev, typeId]
+    );
+  };
 
   /* =========================
-     Step 4 toggle
+     Step 4
      ========================= */
   const toggleModel = (modelId) => {
-  setSelectedModels((prev) => {
-    if (prev.includes(modelId)) {
-      // model already selected → remove it
-      return prev.filter((item) => item !== modelId);
-    } else {
-      // model not selected → add it
-      return [...prev, modelId];
-    }
-  });
-};
-
+    setRunAllModels(false);
+    setSelectedModels((prev) =>
+      prev.includes(modelId)
+        ? prev.filter((m) => m !== modelId)
+        : [...prev, modelId]
+    );
+  };
 
   const onRunAllModelsChange = (checked) => {
     setRunAllModels(checked);
-    if (checked) setSelectedModels([]);
+    if (checked) setSelectedModels(ALL_MODELS);
   };
 
   const runPrediction = () => {
@@ -208,7 +203,7 @@ GCUAAUCGGA`;
   };
 
   /* =========================
-     SWITCH: render step content
+     Render step (SWITCH)
      ========================= */
   const renderStep = () => {
     switch (step) {
@@ -268,7 +263,9 @@ GCUAAUCGGA`;
     <section className="predict">
       <div className="predict__wrap">
         <h1 className="predict__title">Methylation Prediction</h1>
-        <p className="predict__subtitle">Follow the steps to analyze your sequences</p>
+        <p className="predict__subtitle">
+          Follow the steps to analyze your sequences
+        </p>
 
         {/* Stepper */}
         <div className="stepper">
@@ -293,22 +290,25 @@ GCUAAUCGGA`;
           })}
         </div>
 
-        {/* ✅ Switch-rendered Step */}
         {renderStep()}
 
-        {/* Navigation Buttons */}
+        {/* Navigation */}
         <div className="actions">
-          <button className="ghostBtn" onClick={onBack} disabled={step === 1}>
-            ← Back
+          <button className="ghostBtn" onClick={onBack}>
+             Back
           </button>
 
           {step < 4 ? (
             <button className="primaryBtn" onClick={onNext} disabled={!canGoNext()}>
-              Next →
+              Next 
             </button>
           ) : (
-            <button className="primaryBtn" onClick={runPrediction} disabled={!canGoNext()}>
-              ▶ Run Prediction
+            <button
+              className="primaryBtn"
+              onClick={runPrediction}
+              disabled={!canGoNext()}
+            >
+               Run Prediction
             </button>
           )}
         </div>

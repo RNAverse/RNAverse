@@ -1,7 +1,8 @@
 import { CgNotes } from "react-icons/cg";
 import { CiSquareRemove } from "react-icons/ci";
 import { LiaFileUploadSolid } from "react-icons/lia";
-
+import { HiOutlineQuestionMarkCircle } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 export default function Step2SequenceInput({
   sequences,
@@ -18,10 +19,15 @@ export default function Step2SequenceInput({
   uploadedFile,
   removeFile,
 }) {
+  const navigate = useNavigate();
+
   return (
     <div className="card">
       <div className="card__head">
-        <div className="card__icon"><CgNotes /></div>
+        <div className="card__icon">
+          <CgNotes />
+        </div>
+
         <div>
           <div className="card__title">Input Sequences</div>
           <div className="card__hint">
@@ -29,6 +35,16 @@ export default function Step2SequenceInput({
             <b>{validChars}</b>
           </div>
         </div>
+
+        {/* ❓ Help button (same class, same CSS) */}
+        <button
+          type="button"
+          className="helpBtn"
+          onClick={() => navigate("/help")}
+          title="Help"
+        >
+          <HiOutlineQuestionMarkCircle />
+        </button>
       </div>
 
       <textarea
@@ -45,7 +61,7 @@ export default function Step2SequenceInput({
       {sequenceError && <div className="warnBox">{sequenceError}</div>}
 
       <button className="exampleBtn" onClick={loadExample}>
-        ✨ Load Example {typeLabel} Sequences
+          Load Example {typeLabel} Sequences
       </button>
 
       <div className="orRow">
@@ -65,13 +81,19 @@ export default function Step2SequenceInput({
       {uploadedFile ? (
         <div className="uploadedRow">
           <div className="uploadedName">{uploadedFile.name}</div>
-          <button type="button" className="removeFileBtn" onClick={removeFile}><CiSquareRemove />
-          Remove
+          <button
+            type="button"
+            className="removeFileBtn"
+            onClick={removeFile}
+          >
+            <CiSquareRemove /> Remove
           </button>
         </div>
       ) : (
         <button className="uploadBox" onClick={openFilePicker}>
-          <div className="uploadIcon"><LiaFileUploadSolid /></div>
+          <div className="uploadIcon">
+            <LiaFileUploadSolid />
+          </div>
           <div className="uploadTitle">Upload FASTA or CSV</div>
           <div className="uploadHint">Click to browse files</div>
         </button>

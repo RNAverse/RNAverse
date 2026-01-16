@@ -6,53 +6,55 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer__inner">
         <div className="footer__grid">
+
           {/* Brand */}
-          <div className="footer__col">
+          <div className="footer__col footer__col--brand">
             <div className="footer__brandRow">
-              <div className="footer__icon"><RiDnaFill /></div>
-              <div className="footer__brand">RNAverse</div>
+              <div className="footer__icon">
+                <RiDnaFill />
+              </div>
+
+              <div className="footer__brandText">
+                <span className="footer__rna">RNA</span>
+                <span className="footer__verse">verse</span>
+              </div>
             </div>
-            <p className="footer__text">
-              DNA & RNA Methylation Prediction Platform powered by machine learning and deep learning models.
-            </p>
           </div>
 
           {/* Quick Links */}
-          <div className="footer__col">
+          <div className="footer__col footer__col--links">
             <div className="footer__title">Quick Links</div>
             <a className="footer__link" href="/">Home</a>
             <a className="footer__link" href="/predict">Predict</a>
-            <a className="footer__link" href="#results" onClick={(e) => e.preventDefault()}>
-              Results
-            </a>
-            <a className="footer__link" href="#help" onClick={(e) => e.preventDefault()}>
-              Help
-            </a>
+            <a className="footer__link" href="/results">Results</a>
+            <a className="footer__link" href="/help">Help</a>
           </div>
 
-          {/* Resources (no Open Source) */}
-          <div className="footer__col">
+          {/* Resources */}
+          <div className="footer__col footer__col--resources">
             <div className="footer__title">Resources</div>
-            <a className="footer__link" href="#docs" onClick={(e) => e.preventDefault()}>
-              Documentation
-            </a>
-            <a className="footer__link" href="#faq" onClick={(e) => e.preventDefault()}>
-              FAQ
-            </a>
+            <a className="footer__link" href="#">Documentation</a>
+            <a className="footer__link" href="#">FAQ</a>
           </div>
 
           {/* Contact */}
-          <div className="footer__col">
+          <div className="footer__col footer__col--contact">
             <div className="footer__title">Contact</div>
-            <a className="footer__link" href="mailto:research@uwinnipeg.ca">
+            <a
+              className="footer__link"
+              href="mailto:research@uwinnipeg.ca"
+            >
               research@uwinnipeg.ca
             </a>
           </div>
+
         </div>
 
         <div className="footer__bottom">
-          <div>RNAverse Project — University of Winnipeg (Applied Computer Science)</div>
-          <div>Academic use only. © 2026 All rights reserved.</div>
+          <div>
+            RNAverse Project — University of Winnipeg (Applied Computer Science)
+          </div>
+          <div>© 2026 · Academic use only</div>
         </div>
       </div>
     </footer>

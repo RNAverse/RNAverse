@@ -1,25 +1,34 @@
-/* =========================
-   FOOTER
-   ========================= */
 .footer {
   margin-top: auto;
-  border-top: 1px solid rgba(15, 23, 42, 0.08);
-  background: #ffffff;
+  background: #fdfbfb;
 }
 
+/* =====================
+   Container
+   ===================== */
 .footer__inner {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 26px 18px;
+  padding: 16px 18px;
 }
 
+/* =====================
+   Grid Layout (4 columns, shrink-safe)
+   ===================== */
 .footer__grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1fr;
-  gap: 26px;
+  grid-template-columns: minmax(220px, 1.4fr) repeat(3, minmax(0, 1fr));
+  gap: 16px 22px;
   align-items: start;
 }
 
+.footer__col {
+  min-width: 0;
+}
+
+/* =====================
+   Brand
+   ===================== */
 .footer__brandRow {
   display: flex;
   align-items: center;
@@ -36,21 +45,31 @@
   background: linear-gradient(135deg, #6d28d9, #22c55e);
 }
 
-.footer__brand {
+.footer__brandText {
+  display: flex;
+  align-items: flex-end;
+  line-height: 1;
+}
+
+.footer__rna {
+  font-size: 24px;
   font-weight: 900;
-  font-size: 16px;
-  color: #0f172a;
+  letter-spacing: 0.6px;
+  line-height: 1;
+  color: #111827;
 }
 
-.footer__text {
-  margin: 10px 0 0;
-  color: #64748b;
-  font-weight: 600;
-  line-height: 1.6;
-  font-size: 13px;
-  max-width: 360px;
+.footer__verse {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1a1919;
+  margin-left: 1px;
+  line-height: 1.2;
 }
 
+/* =====================
+   Links
+   ===================== */
 .footer__title {
   font-weight: 900;
   color: #0f172a;
@@ -65,12 +84,18 @@
   font-weight: 700;
   font-size: 13px;
   margin: 8px 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .footer__link:hover {
   color: #4f46e5;
 }
 
+/* =====================
+   Bottom Bar
+   ===================== */
 .footer__bottom {
   margin-top: 22px;
   padding-top: 14px;
@@ -83,12 +108,35 @@
   font-size: 12px;
 }
 
-@media (max-width: 900px) {
-  .footer__grid {
-    grid-template-columns: 1fr 1fr;
+.footer__bottom > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* =====================
+   Compact Desktop Tuning
+   ===================== */
+@media (max-width: 980px) {
+  .footer__inner {
+    padding: 14px 16px;
   }
+
+  .footer__grid {
+    gap: 12px 16px;
+    grid-template-columns: minmax(200px, 1.2fr) repeat(3, minmax(0, 1fr));
+  }
+
+  .footer__title {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .footer__link {
+    font-size: 12px;
+    margin: 6px 0;
+  }
+
   .footer__bottom {
-    flex-direction: column;
-    align-items: flex-start;
+    font-size: 11px;
   }
 }

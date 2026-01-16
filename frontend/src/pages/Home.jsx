@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
 import { LuDna } from "react-icons/lu";
+import { IoIosArrowForward } from "react-icons/io";
 import {
   
   HiOutlineBeaker,
@@ -41,7 +42,7 @@ export default function Home() {
   const howItWorks = [
     {
       num: "01",
-      title: "Select Sequence Type",
+      title: "Sequence Type",
       desc: "Choose whether your input is RNA or DNA so validation matches the correct bases.",
     },
     {
@@ -70,11 +71,6 @@ export default function Home() {
   return (
     <section className="home">
       <div className="home__hero">
-        <div className="pill">
-          <span className="pill__spark">✦</span>
-          Academic Research Platform
-        </div>
-
         <h1 className="title">RNAverse</h1>
 
         <h2 className="subtitle">DNA &amp; RNA Methylation Prediction Platform</h2>
@@ -86,7 +82,7 @@ export default function Home() {
 
         <div className="heroBtns">
           <button className="cta" onClick={() => navigate("/predict")}>
-            Start Prediction <span className="cta__arrow">→</span>
+            Start Prediction{" "} <span className="cta__arrow"><IoIosArrowForward /></span>
           </button>
 
           {/* ✅ Learn More goes to Help page/section later */}
@@ -95,7 +91,15 @@ export default function Home() {
           </button>
         </div>
 
-        
+        <div className="pill">
+          <span className="pill__spark"><LuDna /></span>
+          Methylation Analysis Platform
+        </div>
+
+        {/* ✅ gap + line + heading */}
+        <div className="afterPill">
+          <div className="sectionLine" />
+        </div>
 
         {/* Section heading */}
         <div className="featuresHead">
@@ -135,7 +139,7 @@ export default function Home() {
         </div>
 
         <button className="tryBtn" onClick={() => navigate("/predict")}>
-          Try It Now <span className="cta__arrow">→</span>
+          Try It Now{" "} <span className="cta__arrow"><IoIosArrowForward /></span>
         </button>
       </div>
     </section>
