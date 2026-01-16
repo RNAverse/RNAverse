@@ -1,4 +1,3 @@
-
 /* =========================
    1) APP LAYOUT
    ========================= */
@@ -10,75 +9,6 @@
 
 .appMain {
   flex: 1;
-}
-
-/* =========================
-   2) TOP NAVBAR
-   ========================= */
-.topnav {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(30, 41, 59, 0.08);
-}
-
-.topnav__inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 14px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 800;
-}
-
-.brand__icon {
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  border-radius: 10px;
-  color: white;
-  background: linear-gradient(135deg, #6d28d9, #22c55e);
-  box-shadow: 0 10px 25px rgba(109, 40, 217, 0.18);
-}
-
-.brand__text {
-  font-size: 18px;
-  letter-spacing: 0.2px;
-  color: #111827;
-}
-
-.nav {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.nav__link {
-  text-decoration: none;
-  padding: 8px 14px;
-  border-radius: 999px;
-  color: #334155;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.nav__link:hover {
-  background: rgba(99, 102, 241, 0.10);
-}
-
-.nav__link.active {
-  background: rgba(99, 102, 241, 0.14);
-  color: #4f46e5;
 }
 
 /* =========================
@@ -314,6 +244,10 @@
   place-items: center;
   background: rgba(99,102,241,0.10);
 }
+.card__icon svg {
+  font-size: 20px;
+  color: #4f46e5;
+}
 
 .card__title {
   font-weight: 900;
@@ -326,6 +260,16 @@
   color: #64748b;
   font-weight: 600;
   font-size: 14px;
+}
+
+.uploadIcon svg {
+  font-size: 28px;
+  color: #4f46e5;
+}
+
+.removeFileBtn svg {
+  margin-right: 6px;
+  font-size: 16px;
 }
 
 /* =========================
@@ -380,8 +324,6 @@
 /* =========================
    8) STEP 2: INPUT SEQUENCES
    ========================= */
-
-/* Keep textarea + upload inside card (no overflow) */
 .seqTextarea,
 .uploadBox {
   box-sizing: border-box;
@@ -410,13 +352,11 @@
 }
 
 .seqTextarea--error {
-  border-color: #ef4444;          /* red border */
-  background: #fff5f5;            /* light red background */
-  color: #7f1d1d;                 /* dark red text */
-
+  border-color: #ef4444;
+  background: #fff5f5;
+  color: #7f1d1d;
   box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.25);
 }
-
 
 .exampleBtn {
   width: 100%;
@@ -449,7 +389,6 @@
   display: none;
 }
 
-/* Upload box full width */
 .uploadBox {
   display: block;
   width: 100%;
@@ -483,20 +422,17 @@
 }
 
 /* =========================
-   9) WARN BOX (ERROR MESSAGE)
+   9) WARN BOX
    ========================= */
 .warnBox {
   margin-top: 14px;
   padding: 12px 14px;
   border-radius: 12px;
-
-  background: #fef2f2;            /* light red */
-  border: 1px solid #fecaca;      /* red border */
-  color: #b91c1c;                 /* strong red text */
-
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
   font-weight: 400;
 }
-
 
 /* =========================
    10) ACTION BUTTONS
@@ -525,16 +461,12 @@
 /* =========================
    STEP 3 – METHYLATION TYPES
    ========================= */
-
-/* Grid for methylation cards */
 .mGrid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 14px;
 }
 
-
-/* Individual methylation card */
 .mCard {
   text-align: left;
   padding: 18px;
@@ -545,20 +477,17 @@
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 }
 
-/* Hover (not selected yet) */
 .mCard:hover {
   border-color: rgba(99, 102, 241, 0.45);
   background: rgba(99, 102, 241, 0.03);
 }
 
-/* Active (selected) */
 .mCard.active {
   border-color: rgba(99, 102, 241, 0.9);
   background: rgba(99, 102, 241, 0.08);
   box-shadow: 0 16px 40px rgba(79, 70, 229, 0.12);
 }
 
-/* Top row (label + checkbox) */
 .mCard__top {
   display: flex;
   align-items: center;
@@ -566,28 +495,24 @@
   margin-bottom: 10px;
 }
 
-/* m6A / m5C / m7G label */
 .mCard__label {
   font-size: 26px;
   font-weight: 900;
   color: #0f172a;
 }
 
-/* Checkbox styling */
 .mCard input[type="checkbox"] {
   width: 20px;
   height: 20px;
   cursor: pointer;
 }
 
-/* Full chemical name */
 .mCard__full {
   font-size: 13px;
   font-weight: 700;
   color: #334155;
 }
 
-/* Description */
 .mCard__desc {
   margin-top: 6px;
   font-size: 13px;
@@ -595,11 +520,9 @@
   color: #64748b;
 }
 
-
 /* =========================
    STEP 4 – MODEL SELECTION
    ========================= */
-
 .runAllBox {
   display: flex;
   align-items: center;
@@ -644,23 +567,18 @@
 
 .modelGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* 3 columns, simple & clear */
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 14px;
 }
-
-
 
 .modelCard {
   width: 100%;
   text-align: left;
   cursor: pointer;
-
   padding: 16px;
   border-radius: 16px;
-
   border: 2px solid rgba(148, 163, 184, 0.35);
   background: #fff;
-
   transition: 0.15s;
 }
 
@@ -710,7 +628,6 @@
   font-weight: 700;
 }
 
-/* ---------- Color accents (default hover) ---------- */
 .modelCard.blue:hover   { border-color: rgba(59, 130, 246, 0.35); }
 .modelCard.green:hover  { border-color: rgba(34, 197, 94, 0.35); }
 .modelCard.amber:hover  { border-color: rgba(245, 158, 11, 0.35); }
@@ -718,7 +635,6 @@
 .modelCard.rose:hover   { border-color: rgba(244, 63, 94, 0.35); }
 .modelCard.indigo:hover { border-color: rgba(99, 102, 241, 0.35); }
 
-/* ---------- Active states (selected) ---------- */
 .modelCard.active {
   box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
 }
@@ -753,101 +669,110 @@
   background: rgba(99, 102, 241, 0.07);
 }
 
+/* ===== Large Illustration Block ===== */
+.illustrationBlock {
+  margin-top: 40px;
+  padding: 30px 0;
 
-
-
-
-/* =========================
-   FOOTER
-   ========================= */
-.footer {
-  margin-top: auto;
-  border-top: 1px solid rgba(15, 23, 42, 0.08);
-  background: #ffffff;
-}
-
-.footer__inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 26px 18px;
-}
-
-.footer__grid {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1fr;
-  gap: 26px;
-  align-items: start;
-}
-
-.footer__brandRow {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 60px;
+
+  opacity: 0.4;
+  pointer-events: none;
 }
 
-.footer__icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  background: linear-gradient(135deg, #6d28d9, #22c55e);
+.illusItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
-.footer__brand {
+.illusIcon {
+  font-size: 72px;
+  line-height: 1;
+}
+
+.illusLabel {
   font-weight: 900;
+  letter-spacing: 2px;
   font-size: 16px;
-  color: #0f172a;
+  color: #334155;
 }
 
-.footer__text {
-  margin: 10px 0 0;
+.illusDivider {
+  width: 120px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #64748b, transparent);
+  border-radius: 999px;
+}
+
+
+
+
+.helpBtn {
+  margin-left: auto;   /* 👈 THIS fixes everything */
+  background: none;
+  border: none;
+  cursor: pointer;
   color: #64748b;
-  font-weight: 600;
-  line-height: 1.6;
-  font-size: 13px;
-  max-width: 360px;
 }
 
-.footer__title {
-  font-weight: 900;
-  color: #0f172a;
-  margin-bottom: 10px;
-  font-size: 14px;
+.helpBtn svg {
+  font-size: 22px;
 }
 
-.footer__link {
-  display: block;
-  text-decoration: none;
-  color: #475569;
-  font-weight: 700;
-  font-size: 13px;
-  margin: 8px 0;
-}
-
-.footer__link:hover {
+.helpBtn:hover {
   color: #4f46e5;
 }
 
-.footer__bottom {
-  margin-top: 22px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(15, 23, 42, 0.06);
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  color: #94a3b8;
-  font-weight: 700;
-  font-size: 12px;
+
+.ghostBtn {
+  padding: 12px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.55);
+
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(6px);
+
+  font-weight: 800;
+  color: #334155;
+
+  cursor: pointer;
+
+  transition: transform 0.15s ease,
+              box-shadow 0.15s ease,
+              border-color 0.15s ease,
+              background 0.15s ease;
 }
 
-@media (max-width: 900px) {
-  .footer__grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  .footer__bottom {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+/* Hover = user knows it's interactive */
+.ghostBtn:hover {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Click press */
+.ghostBtn:active {
+  transform: translateY(0px);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+/* Keyboard focus (important accessibility) */
+.ghostBtn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+  border-color: rgba(99, 102, 241, 0.7);
+}
+
+/* Disabled state (if you ever use it again) */
+.ghostBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }

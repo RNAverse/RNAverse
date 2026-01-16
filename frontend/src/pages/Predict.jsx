@@ -1,4 +1,6 @@
+// src/pages/Predict.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Step1SequenceType from "./predict/steps/Step1SequenceType";
 import Step2SequenceInput from "./predict/steps/Step2SequenceInput";
@@ -14,6 +16,8 @@ import {
 } from "react-icons/fa";
 
 export default function Predict() {
+  const navigate = useNavigate();
+
   const steps = useMemo(
     () => [
       "Sequence Type",
@@ -69,13 +73,10 @@ ${sequenceType === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
     const allowed =
       sequenceType === "RNA" ? ["A", "U", "C", "G"] : ["A", "C", "G", "T"];
 
-    const lines = text.split("\n");
-
-    for (const line of lines) {
+    for (const line of text.split("\n")) {
       if (line.startsWith(">")) continue;
 
-      const clean = line.toUpperCase().replace(/\s/g, "");
-      for (const ch of clean) {
+      for (const ch of line.toUpperCase().replace(/\s/g, "")) {
         if (!allowed.includes(ch)) {
           setSequenceError(
             sequenceType === "RNA"
@@ -104,25 +105,25 @@ ${sequenceType === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
     setStep((s) => Math.min(4, s + 1));
   };
 
-  const onBack = () => setStep((s) => Math.max(1, s - 1));
+  // ✅ FIXED BACK BUTTON
+  const onBack = () => {
+    if (step === 1) {
+      navigate("/"); // go Home
+    } else {
+      setStep((s) => s - 1);
+    }
+  };
 
   /* Step 2 helpers */
   const loadExample = () => {
     const example =
       sequenceType === "DNA"
-        ? `>Sequence1
-ACGTTGCA
->Sequence2
-GATTACA`
-        : `>Sequence1
-AUGCCAUAG
->Sequence2
-GCUAAUCGGA`;
+        ? `>Sequence1\nACGTTGCA\n>Sequence2\nGATTACA`
+        : `>Sequence1\nAUGCCAUAG\n>Sequence2\nGCUAAUCGGA`;
 
     setSequences(example);
     validateSequences(example);
     setUploadedFile(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const openFilePicker = () => fileInputRef.current?.click();
@@ -150,7 +151,6 @@ GCUAAUCGGA`;
     setUploadedFile(null);
     setSequences("");
     setSequenceError(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   /* Step 3 toggle */
@@ -173,7 +173,7 @@ GCUAAUCGGA`;
 
   const onRunAllModelsChange = (checked) => {
     setRunAllModels(checked);
-    if (checked) setSelectedModels([]);
+    if (checked) setSelectedModels(ALL_MODELS);
   };
 
   const runPrediction = () => {
@@ -238,6 +238,9 @@ GCUAAUCGGA`;
         <p className="predict__subtitle">
           Follow the steps to analyze your sequences
         </p>
+        <p className="predict__subtitle">
+          Follow the steps to analyze your sequences
+        </p>
 
         {/* Stepper */}
         <div className="stepper">
@@ -270,6 +273,7 @@ GCUAAUCGGA`;
 
         {renderStep()}
 
+        {/* Navigation */}
         {/* Navigation */}
         <div className="actions">
           <button

@@ -16,14 +16,31 @@ export default function Step1SequenceType({
           <div className="card__hint">
             Choose the type of sequence you want to analyze
           </div>
+          <div className="card__hint">
+            Choose the type of sequence you want to analyze
+          </div>
         </div>
+
+        {/* ❓ Help button */}
+        <button
+          type="button"
+          className="helpBtn"
+          onClick={() => navigate("/help")}
+          title="Help"
+        >
+          <HiOutlineQuestionMarkCircle />
+        </button>
       </div>
 
+      {/* RNA / DNA buttons */}
       <div className="grid2">
         {types.map((t) => (
           <button
             key={t.id}
             type="button"
+            className={`selectBox ${t.id.toLowerCase()} ${
+              sequenceType === t.id ? "active" : ""
+            }`}
             className={`selectBox ${t.id.toLowerCase()} ${
               sequenceType === t.id ? "active" : ""
             }`}
@@ -33,6 +50,21 @@ export default function Step1SequenceType({
             <div className="selectBox__sub">{t.description}</div>
           </button>
         ))}
+      </div>
+
+      {/* Illustration block */}
+      <div className="illustrationBlock">
+        <div className="illusItem">
+          <span className="illusIcon"><PiDnaThin /></span>
+          <span className="illusLabel">RNA</span>
+        </div>
+
+        <div className="illusDivider" />
+
+        <div className="illusItem">
+          <span className="illusIcon"><GiDna2 /></span>
+          <span className="illusLabel">DNA</span>
+        </div>
       </div>
     </div>
   );

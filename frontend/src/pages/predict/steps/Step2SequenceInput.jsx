@@ -20,6 +20,8 @@ export default function Step2SequenceInput({
   uploadedFile,
   removeFile,
 }) {
+  const navigate = useNavigate();
+
   return (
     <div className="card">
       <div className="card__head">
@@ -33,6 +35,16 @@ export default function Step2SequenceInput({
             {typeLabel}: <b>{validChars}</b>
           </div>
         </div>
+
+        {/* ❓ Help button (same class, same CSS) */}
+        <button
+          type="button"
+          className="helpBtn"
+          onClick={() => navigate("/help")}
+          title="Help"
+        >
+          <HiOutlineQuestionMarkCircle />
+        </button>
       </div>
 
       <textarea

@@ -12,6 +12,8 @@ export default function Step4ModelSelection({
   selectedModels,
   toggleModel,
 }) {
+  const navigate = useNavigate();
+
   const modelOptions = [
     {
       id: "SVM",
@@ -69,8 +71,19 @@ export default function Step4ModelSelection({
             Choose how you want to run prediction
           </div>
         </div>
+
+        {/* ❓ Help button — SAME CLASS NAME */}
+        <button
+          type="button"
+          className="helpBtn"
+          onClick={() => navigate("/help")}
+          title="Help"
+        >
+          <HiOutlineQuestionMarkCircle />
+        </button>
       </div>
 
+      {/* Run All Models */}
       <div className={`runAllBox ${runAllModels ? "active" : ""}`}>
         <div className="runAllLeft">
           <div className="runAllTitle">
@@ -99,9 +112,9 @@ export default function Step4ModelSelection({
             Or select specific models to run
           </div>
 
-          <div className="modelGrid">
-            {modelOptions.map((m) => {
-              const selected = selectedModels.includes(m.id);
+      <div className="modelGrid">
+        {modelOptions.map((m) => {
+          const selected = selectedModels.includes(m.id);
 
               return (
                 <button
@@ -131,12 +144,12 @@ export default function Step4ModelSelection({
                     </div>
                   </div>
 
-                  <div className="modelName">{m.name}</div>
-                  <div className="modelSub">{m.fullName}</div>
-                </button>
-              );
-            })}
-          </div>
+              <div className="modelName">{m.name}</div>
+              <div className="modelSub">{m.fullName}</div>
+            </button>
+          );
+        })}
+      </div>
 
           {selectedModels.length === 0 && (
             <div className="warnBox">

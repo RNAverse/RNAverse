@@ -31,14 +31,10 @@ export default function Home() {
     },
   ];
 
+
   return (
     <section className="home">
       <div className="home__hero">
-        <div className="pill">
-          <span className="pill__spark">✦</span>
-          Academic Research Platform
-        </div>
-
         <h1 className="title">RNAverse</h1>
 
         <h2 className="subtitle">
@@ -97,6 +93,26 @@ export default function Home() {
             </div>
           ))}
         </div>
+
+        {/* ✅ How It Works section */}
+        <div className="howHead">
+          <h3 className="howTitle">How It Works</h3>
+          <p className="howSubtitle">Simple five-step process to get methylation predictions</p>
+        </div>
+
+        <div className="howGrid">
+          {howItWorks.map((s) => (
+            <div key={s.num} className="howCard">
+              <div className="howNum">{s.num}</div>
+              <div className="howCardTitle">{s.title}</div>
+              <div className="howCardDesc">{s.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        <button className="tryBtn" onClick={() => navigate("/predict")}>
+          Try It Now{" "} <span className="cta__arrow"><IoIosArrowForward /></span>
+        </button>
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
-import { NavLink, Routes, Route } from "react-router-dom";
-
-// Pages
+// src/App.jsx
+import Footer from "./components/Footer.jsx";
+import Nav from "./components/Nav.jsx";
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Predict from "./pages/Predict.jsx";
 import Results from "./pages/Results.jsx";
@@ -22,78 +23,10 @@ import {
 
 import "./App.css";
 
-function TopNav() {
-  return (
-    <header className="topnav">
-      <div className="topnav__inner">
-        <div className="brand">
-          <div className="brand__icon">
-            <FaDna />
-          </div>
-          <span className="brand__text">RNAverse</span>
-        </div>
-
-        <nav className="nav">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              isActive ? "nav__link active" : "nav__link"
-            }
-          >
-            <FaHome style={{ marginRight: "6px" }} />
-            Home
-          </NavLink>
-
-          <NavLink
-            to="/predict"
-            className={({ isActive }) =>
-              isActive ? "nav__link active" : "nav__link"
-            }
-          >
-            <FaFlask style={{ marginRight: "6px" }} />
-            Predict
-          </NavLink>
-
-          <NavLink
-            to="/results"
-            className={({ isActive }) =>
-              isActive ? "nav__link active" : "nav__link"
-            }
-          >
-            <FaChartBar style={{ marginRight: "6px" }} />
-            Results
-          </NavLink>
-
-          <NavLink
-            to="/help"
-            className={({ isActive }) =>
-              isActive ? "nav__link active" : "nav__link"
-            }
-          >
-            <FaQuestionCircle style={{ marginRight: "6px" }} />
-            Help
-          </NavLink>
-
-          <NavLink
-            to="/settings"
-            className={({ isActive }) =>
-              isActive ? "nav__link active" : "nav__link"
-            }
-          >
-            <FaCog style={{ marginRight: "6px" }} />
-            Settings
-          </NavLink>
-        </nav>
-      </div>
-    </header>
-  );
-}
-
 export default function App() {
   return (
     <div className="appShell">
-      <TopNav />
+      <Nav />
 
       <main className="appMain">
         <Routes>

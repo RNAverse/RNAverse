@@ -41,6 +41,16 @@ export default function Step3Methylation({
             Select one or more methylation types to predict
           </div>
         </div>
+
+        {/* ❓ Help button (same class, same CSS) */}
+        <button
+          type="button"
+          className="helpBtn"
+          onClick={() => navigate("/help")}
+          title="Help"
+        >
+          <HiOutlineQuestionMarkCircle />
+        </button>
       </div>
 
       <div className="mGrid">
