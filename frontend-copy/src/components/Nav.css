@@ -1,0 +1,108 @@
+/* src/components/Nav.css */
+
+/* =========================
+   TOP NAVBAR
+   ========================= */
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(30, 41, 59, 0.08);
+}
+
+.topnav__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* =========================
+   BRAND / LOGO
+   ========================= */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.brand__icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: white;
+  background: linear-gradient(135deg, #6d28d9, #22c55e);
+  box-shadow: 0 10px 25px rgba(109, 40, 217, 0.18);
+}
+
+/* wrapper for RNA + verse */
+.brand__text {
+  display: flex;
+  align-items: flex-end;   
+  line-height: 1;
+}
+
+/* RNA — tall & bold */
+.brand__rna {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  line-height: 1;
+  color: #111827;
+}
+
+/* verse — black, normal weight */
+.brand__verse {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1a1919;
+  margin-left: 1px;
+  line-height: 1.2;
+}
+
+.brand:hover {
+  opacity: 0.9;
+}
+
+/* =========================
+   NAV LINKS
+   ========================= */
+.nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.nav__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #334155;
+  text-decoration: none;
+}
+
+.nav__link.active {
+  background: rgba(99, 102, 241, 0.14);
+  color: #4f46e5;
+}
+
+.nav__link:hover {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.nav__icon {
+  font-size: 20px;
+}
