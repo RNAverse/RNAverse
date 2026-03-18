@@ -1,0 +1,10 @@
+Base used: frontend copy 4
+Copied only missing files from frontend:
+- public/vite.svg
+- results components
+- Help.jsx
+- Results.jsx
+- Settings.jsx
+- src/styles/results.css
+
+Also updated App.jsx and Nav.jsx so the copied pages are reachable in the app.
