@@ -18,8 +18,23 @@ export default function Step2SequenceInput({
   onFileChange,
   uploadedFile,
   removeFile,
+  methylation,
 }) {
   const navigate = useNavigate();
+
+  const cleanedSequenceLength = sequences
+    .split("\n")
+    .filter((line) => !line.startsWith(">"))
+    .join("")
+    .replace(/\s+/g, "")
+    .length;
+
+  const getLengthRule = () => {
+    if (methylation === "m5C") return "Required length: 41";
+    if (methylation === "m6A") return "Required length: 2001";
+    if (methylation === "m7G") return "Flexible length";
+    return "Select a methylation type first";
+  };
 
   return (
     <div className="card">
@@ -34,9 +49,17 @@ export default function Step2SequenceInput({
             Paste your sequences or upload a file. Valid characters for {typeLabel}:{" "}
             <b>{validChars}</b>
           </div>
+          <div className="card__hint">
+            Selected methylation: <b>{methylation || "None"}</b>
+          </div>
+          <div className="card__hint">
+            <b>{getLengthRule()}</b>
+          </div>
+          <div className="card__hint">
+            Current sequence length: <b>{cleanedSequenceLength}</b>
+          </div>
         </div>
 
-        {/* ❓ Help button (same class, same CSS) */}
         <button
           type="button"
           className="helpBtn"
@@ -48,7 +71,7 @@ export default function Step2SequenceInput({
       </div>
 
       <textarea
-        className={`seqTextarea ${sequenceError ? "seqTextarea--error" : ""}`}
+        className={`seqTextarea ${sequenceError.length > 0 ? "seqTextarea--error" : ""}`}
         placeholder={placeholderText}
         value={sequences}
         onChange={(e) => {
@@ -58,10 +81,16 @@ export default function Step2SequenceInput({
         }}
       />
 
-      {sequenceError && <div className="warnBox">{sequenceError}</div>}
+      {sequenceError.length > 0 && (
+        <div className="warnBox">
+          {sequenceError.map((error, index) => (
+            <div key={index}>{error}</div>
+          ))}
+        </div>
+      )}
 
       <button className="exampleBtn" onClick={loadExample}>
-          Load Example {typeLabel} Sequences
+        Load Example {typeLabel} Sequences
       </button>
 
       <div className="orRow">
@@ -73,7 +102,7 @@ export default function Step2SequenceInput({
       <input
         ref={fileInputRef}
         type="file"
-        accept=".fasta,.fa,.csv"
+        accept=".fasta,.fa,.txt"
         className="hiddenFile"
         onChange={onFileChange}
       />
@@ -94,7 +123,7 @@ export default function Step2SequenceInput({
           <div className="uploadIcon">
             <LiaFileUploadSolid />
           </div>
-          <div className="uploadTitle">Upload FASTA or CSV</div>
+          <div className="uploadTitle">Upload TXT or FASTA</div>
           <div className="uploadHint">Click to browse files</div>
         </button>
       )}

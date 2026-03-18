@@ -12,7 +12,7 @@ export default function Predict() {
   const navigate = useNavigate();
 
   const steps = useMemo(
-    () => ["Sequence Type", "Input Sequences", "Methylation Type", "Model Selection"],
+    () => ["Sequence Type", "Methylation Type", "Input Sequences", "Model Selection"],
     []
   );
 
@@ -24,32 +24,44 @@ export default function Predict() {
   const [sequenceType, setSequenceType] = useState("");
 
   /* =========================
-     STEP 2
+     STEP 3 (INPUT SEQUENCES)
      ========================= */
   const [sequences, setSequences] = useState("");
   const fileInputRef = useRef(null);
-  const [sequenceError, setSequenceError] = useState(null);
+  const [sequenceError, setSequenceError] = useState([]);
   const [uploadedFile, setUploadedFile] = useState(null);
 
   /* =========================
-     STEP 3 ( SINGLE SELECT)
+     STEP 2 (METHYLATION)
      ========================= */
   const [methylation, setMethylation] = useState(""); // "m6A" | "m5C" | "m7G"
 
   /* =========================
-     STEP 4 ( SINGLE SELECT RADIO)
+     STEP 4 (MODEL)
      ========================= */
-  const [selectedModel, setSelectedModel] = useState(""); // "CNN" | "SVM" | ...
+  const [selectedModel, setSelectedModel] = useState("");
 
   /* =========================
-     Reset Step 2 if type changes
+     Reset helpers
      ========================= */
-  useEffect(() => {
+  const resetSequenceInput = () => {
     setSequences("");
-    setSequenceError(null);
+    setSequenceError([]);
     setUploadedFile(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  /* =========================
+     Reset sequence input when
+     type or methylation changes
+     ========================= */
+  useEffect(() => {
+    resetSequenceInput();
   }, [sequenceType]);
+
+  useEffect(() => {
+    resetSequenceInput();
+  }, [methylation]);
 
   /* =========================
      Step 1 options
@@ -62,42 +74,81 @@ export default function Predict() {
   const validChars = sequenceType === "DNA" ? "A, C, G, T" : "A, U, C, G";
   const typeLabel = sequenceType || "RNA";
 
-  const placeholderText = `Paste sequences here. One or multiple sequences allowed.
+  const placeholderText = (() => {
+    if (methylation === "m5C") {
+      return `Paste sequences here. One or multiple sequences allowed.
+
+Example:
+>Sequence1
+AUCGCGCGCGCGCGCGCGCGCGCGCGCGCGCGCGCGCGCGC`;
+    }
+
+    if (methylation === "m6A") {
+      return `Paste sequences here.
+
+m6A requires a sequence of length 2001.
+You can paste your full sequence directly or upload a .txt or .fasta file.`;
+    }
+
+    return `Paste sequences here. One or multiple sequences allowed.
 
 Example:
 >Sequence1
 ${(sequenceType || "RNA") === "DNA" ? "ACGTACGT" : "AUGCCAUG"}
 >Sequence2
 ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
+  })();
 
   /* =========================
      Validation
      ========================= */
   const validateSequences = (text) => {
     if (!text.trim()) {
-      setSequenceError(null);
+      setSequenceError([]);
       return;
     }
 
-    const allowed =
-      sequenceType === "RNA" ? ["A", "U", "C", "G"] : ["A", "C", "G", "T"];
+    const cleaned = text
+      .split("\n")
+      .filter((line) => !line.startsWith(">"))
+      .join("")
+      .replace(/\s+/g, "")
+      .toUpperCase();
 
-    for (const line of text.split("\n")) {
-      if (line.startsWith(">")) continue;
+    const errors = [];
 
-      for (const ch of line.toUpperCase().replace(/\s/g, "")) {
-        if (!allowed.includes(ch)) {
-          setSequenceError(
-            sequenceType === "RNA"
-              ? "Invalid RNA sequence. Only A, U, C, G are allowed."
-              : "Invalid DNA sequence. Only A, C, G, T are allowed."
-          );
-          return;
-        }
+    // Validate displayed input rules first
+    if (sequenceType === "RNA") {
+      if (!/^[AUCG]*$/.test(cleaned)) {
+        errors.push("Sequence can only contain A, U, C, and G.");
+      }
+    } else {
+      if (!/^[ACTG]*$/.test(cleaned)) {
+        errors.push("Sequence can only contain A, C, T, and G.");
       }
     }
 
-    setSequenceError(null);
+    // Internal normalization for model
+    const normalized = cleaned.replace(/U/g, "T");
+
+    // Length validation
+    if (methylation === "m5C" && normalized.length !== 41) {
+      errors.push(
+        normalized.length > 41
+          ? "Sequence too long. Required length is 41."
+          : "Sequence too short. Required length is 41."
+      );
+    }
+
+    if (methylation === "m6A" && normalized.length !== 2001) {
+      errors.push(
+        normalized.length > 2001
+          ? "Sequence too long. Required length is 2001."
+          : "Sequence too short. Required length is 2001."
+      );
+    }
+
+    setSequenceError(errors);
   };
 
   /* =========================
@@ -105,9 +156,9 @@ ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
      ========================= */
   const canGoNext = () => {
     if (step === 1) return !!sequenceType;
-    if (step === 2) return sequences.trim().length > 0 && !sequenceError;
-    if (step === 3) return !!methylation;      //  single select
-    if (step === 4) return !!selectedModel;    // single select model
+    if (step === 2) return !!methylation;
+    if (step === 3) return sequences.trim().length > 0 && sequenceError.length === 0;
+    if (step === 4) return !!selectedModel;
     return false;
   };
 
@@ -122,13 +173,26 @@ ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
   };
 
   /* =========================
-     Step 2 helpers
+     Sequence helpers
      ========================= */
   const loadExample = () => {
-    const example =
-      sequenceType === "DNA"
-        ? `>Sequence1\nACGTTGCA\n>Sequence2\nGATTACA`
-        : `>Sequence1\nAUGCCAUAG\n>Sequence2\nGCUAAUCGGA`;
+    let example = "";
+
+    if (methylation === "m5C") {
+      example = `>Sequence1\nAUCGCGCGCGCGCGCGCGCGCGCGCGCGCGCGCGCGCGCGC`;
+    } else if (methylation === "m6A") {
+      example = `>Sequence1\n${"A".repeat(2001)}`;
+    } else if (methylation === "m7G") {
+      example =
+        sequenceType === "DNA"
+          ? `>Sequence1\nACGTTGCA\n>Sequence2\nGATTACA`
+          : `>Sequence1\nAUGCCAUAG\n>Sequence2\nGCUAAUCGGA`;
+    } else {
+      example =
+        sequenceType === "DNA"
+          ? `>Sequence1\nACGTTGCA\n>Sequence2\nGATTACA`
+          : `>Sequence1\nAUGCCAUAG\n>Sequence2\nGCUAAUCGGA`;
+    }
 
     setSequences(example);
     validateSequences(example);
@@ -142,12 +206,11 @@ ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
     const file = e.target.files?.[0];
     if (!file) return;
 
-    //  FASTA only
-    const allowedExt = [".fasta", ".fa"];
+    const allowedExt = [".fasta", ".fa", ".txt"];
     const ext = "." + file.name.split(".").pop().toLowerCase();
 
     if (!allowedExt.includes(ext)) {
-      setSequenceError("Invalid file type. Please upload FASTA files (.fasta or .fa).");
+      setSequenceError(["Invalid file type. Please upload .txt, .fasta, or .fa files."]);
       return;
     }
 
@@ -163,25 +226,33 @@ ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
   const removeFile = () => {
     setUploadedFile(null);
     setSequences("");
-    setSequenceError(null);
+    setSequenceError([]);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   /* =========================
-     Step 3 ( SINGLE SELECT)
+     Step 2
      ========================= */
   const selectMethylation = (typeId) => {
     setMethylation(typeId);
   };
 
   const runPrediction = () => {
+    const cleanedSequence = sequences
+      .split("\n")
+      .filter((line) => !line.startsWith(">"))
+      .join("")
+      .replace(/\s+/g, "")
+      .toUpperCase()
+      .replace(/U/g, "T");
+
     alert(
-      `Run Prediction\nType: ${sequenceType}\nMethylation: ${methylation}\nModel: ${selectedModel}`
+      `Run Prediction\nType: ${sequenceType}\nMethylation: ${methylation}\nModel: ${selectedModel}\nSequence: ${cleanedSequence}`
     );
   };
 
   /* =========================
-     Render step (SWITCH)
+     Render step
      ========================= */
   const renderStep = () => {
     switch (step) {
@@ -195,6 +266,15 @@ ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
         );
 
       case 2:
+        return (
+          <Step3Methylation
+            methylation={methylation}
+            selectMethylation={selectMethylation}
+            canGoNext={canGoNext}
+          />
+        );
+
+      case 3:
         return (
           <Step2SequenceInput
             sequences={sequences}
@@ -210,15 +290,7 @@ ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
             onFileChange={onFileChange}
             uploadedFile={uploadedFile}
             removeFile={removeFile}
-          />
-        );
-
-      case 3:
-        return (
-          <Step3Methylation
             methylation={methylation}
-            selectMethylation={selectMethylation}
-            canGoNext={canGoNext}
           />
         );
 
@@ -241,7 +313,6 @@ ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
         <h1 className="predict__title">Methylation Prediction</h1>
         <p className="predict__subtitle">Follow the steps to analyze your sequences</p>
 
-        {/* Stepper */}
         <div className="stepper">
           {steps.map((label, idx) => {
             const n = idx + 1;
@@ -252,7 +323,6 @@ ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
               <div className="step" key={label}>
                 <div className={active ? "step__num active" : done ? "step__num done" : "step__num"}>
                   {done ? <HiCheck /> : n}
-
                 </div>
                 <div className="step__label">{label}</div>
                 {n !== steps.length && <div className="step__line" />}
@@ -263,7 +333,6 @@ ${(sequenceType || "RNA") === "DNA" ? "GATTACA" : "GCUAAUCGGA"}`;
 
         {renderStep()}
 
-        {/* Navigation */}
         <div className="actions">
           <button className="ghostBtn" onClick={onBack}>
             Back
